@@ -4,8 +4,7 @@ using Backend.Data; // 確認這裡引用的 Namespace 對應到你的資料庫�
 var builder = WebApplication.CreateBuilder(args);
 
 // --- 1. 設定 CORS (允許 Next.js 連線) ---
-// 這裡之後要把您的 Vercel 網址補上去
-var vercelUrl = "https://your-portfolio.vercel.app"; 
+var vercelUrl = "https://myweb-eight-fawn.vercel.app"; 
 
 builder.Services.AddCors(options =>
 {
