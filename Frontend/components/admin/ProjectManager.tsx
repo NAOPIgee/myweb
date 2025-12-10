@@ -69,7 +69,8 @@ export default function ProjectManager() {
       await adminService.createProject({
         ...form,
         images: imageList,
-        techStack: form.techStack.split(',').map(s => s.trim()).filter(s => s !== '')
+        techStack: form.techStack.split(',').map(s => s.trim()).filter(s => s !== ''),
+        imageUrl: ''
       });
       alert('專案發布成功！');
       setIsEditing(false);
