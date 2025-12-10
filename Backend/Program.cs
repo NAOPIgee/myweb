@@ -3,23 +3,24 @@ using Backend.Data; // 確認這裡引用的 Namespace 對應到你的資料庫�
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- 1. 設定資料庫連線字串 ---
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// --- 1. 設定 CORS (允許 Next.js 連線) ---
+// 這裡之後要把您的 Vercel 網址補上去
+var vercelUrl = "https://your-portfolio.vercel.app"; 
 
-// --- 2. 設定 CORS (允許 Next.js 連線) ---
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJs",
-        policy => policy.WithOrigins("http://localhost:3000") // 允許前端
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+        policy => policy.WithOrigins(
+                        "http://localhost:3000", // 本地開發
+                        vercelUrl                // Vercel 正式站 (之後記得改)
+                    ) 
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
 });
 
-// --- 3. 設定資料庫 (MySQL) ---
+// --- 2. 設定資料庫 (改用 InMemory) ---
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, 
-        ServerVersion.AutoDetect(connectionString))
-);
+    options.UseInMemoryDatabase("PortfolioDb"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
