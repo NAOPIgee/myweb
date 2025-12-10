@@ -13,6 +13,7 @@ builder.Services.AddCors(options =>
                         "http://localhost:3000", // 本地開發
                         vercelUrl                // Vercel 正式站 (之後記得改)
                     ) 
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 });
