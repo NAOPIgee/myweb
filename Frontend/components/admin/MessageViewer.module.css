@@ -1,0 +1,72 @@
+.container {
+  border: 1px solid #e0dbcf;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.thead {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e0dbcf;
+}
+
+.th {
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #666;
+}
+
+.tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.tbody tr:last-child {
+  border-bottom: none;
+}
+
+.tbody tr:hover {
+  background-color: #fef2f2;
+}
+
+.td {
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #222;
+  vertical-align: top;
+}
+
+.date {
+  color: #888;
+  white-space: nowrap;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.email {
+  color: #c0392b;
+  font-size: 0.75rem;
+}
+
+.content {
+  line-height: 1.5;
+  color: #444;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem;
+  background-color: #f9f9f9;
+  border: 2px dashed #ddd;
+  border-radius: 0.5rem;
+  color: #888;
+}

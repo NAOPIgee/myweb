@@ -1,0 +1,256 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.btnAdd {
+    background-color: #27ae60;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+.listGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #e0dbcf;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cardContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.thumb {
+    width: 5rem;
+    height: 3.5rem;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    background-color: #eee;
+    border: 1px solid #ddd;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.projectTitle {
+    font-weight: 700;
+    color: #222;
+}
+
+.category {
+    font-size: 0.75rem;
+    color: #666;
+    background-color: #f4f1ea;
+    padding: 0.125rem 0.5rem;
+    border-radius: 99px;
+    display: inline-block;
+    margin-top: 0.25rem;
+}
+
+.btnDelete {
+    color: #c0392b;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnDelete:hover {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem;
+    color: #888;
+    font-style: italic;
+}
+
+.formContainer {
+    max-width: 48rem;
+    margin: 0 auto;
+}
+
+.formHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btnCancel {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+}
+
+.btnCancel:hover {
+    color: #222;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .formGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.fullCol {
+    grid-column: 1 / -1;
+}
+
+.label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.input,
+.textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0dbcf;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: #27ae60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.btnSubmit {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.btnSubmit:hover {
+    background-color: #219150;
+}
+
+.btnSubmit:disabled {
+    background-color: #ccc;
+}
+
+.fileList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.fileRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.fileRow:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.fileInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.fileThumb {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+.fileName {
+    font-size: 0.85rem;
+    color: #374151;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.btnRemoveFile {
+    color: #ef4444;
+    background: transparent;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.btnRemoveFile:hover {
+    background-color: #fee2e2;
+}

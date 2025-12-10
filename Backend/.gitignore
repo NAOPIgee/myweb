@@ -1,0 +1,21 @@
+# ========================
+# 1. 必擋項目 (Build Results)
+# ========================
+[Bb]in/
+[Oo]bj/
+
+# ========================
+# 2. Config 相關 (敏感資料)
+# ========================
+# 忽略開發環境的設定 (通常含本機 DB 連線)
+appsettings.Development.json
+appsettings.Local.json
+
+# 如果您有自訂的含有密碼的 config
+ConnectionStrings.config
+Secrets.config
+
+# ========================
+# 3. 注意：Migrations 不寫在這裡！
+# (因為 Migrations 預設就是要上傳的)
+# ========================
