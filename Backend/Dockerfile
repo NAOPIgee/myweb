@@ -4,7 +4,7 @@ WORKDIR /src
 
 # 複製 csproj 並還原依賴 (Restore)
 # 注意：如果您的專案檔名不是 Portfolio.csproj，請修改這裡
-COPY ["*.csproj", "./"]
+COPY ["Backend.csproj", "./"]
 RUN dotnet restore
 
 # 複製其餘程式碼並編譯 (Publish)
@@ -24,4 +24,4 @@ EXPOSE 8080
 # 啟動應用程式
 # ★★★ 重要：請將 YourProjectName.dll 改成您實際編譯出的 dll 檔名 ★★★
 # (通常跟您的 csproj 檔名一樣)
-ENTRYPOINT ["dotnet", "YourProjectName.dll"]
+ENTRYPOINT ["dotnet", "Backend.dll"]
