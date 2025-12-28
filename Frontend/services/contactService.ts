@@ -1,4 +1,4 @@
-import api from '@/lib/api';
+import api, { ApiResponse } from '@/lib/api';
 
 export type CreateMessageDto = {
   name: string;
@@ -8,7 +8,7 @@ export type CreateMessageDto = {
 
 export const contactService = {
   sendMessage: async (data: CreateMessageDto) => {
-    const response = await api.post<CreateMessageDto>('/contact', data);
+    const response = await api.post<ApiResponse<CreateMessageDto>>('/contact', data);
     return response.data;
   }
 };
