@@ -3,7 +3,7 @@ namespace Backend.Wrappers
     public class ApiResponse<T>
     {
         // 成功
-        public ApiResponse(T data, string message = null)
+        public ApiResponse(T data, string? message = null)
         {
             Succeeded = true;
             Message = message ?? "Success";
