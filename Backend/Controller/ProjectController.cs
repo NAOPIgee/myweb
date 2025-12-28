@@ -1,8 +1,10 @@
-// Controllers/ProjectsController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
+using Backend.DTOs;
+using Backend.Wrappers;
+using System.Text.Json;
 
 namespace Backend.Controllers
 {
@@ -19,37 +21,69 @@ namespace Backend.Controllers
 
         // GET: api/projects (取得所有專案)
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ProjectResponse>>> GetProjects()
         {
-            return await _context.Projects.OrderByDescending(p => p.CreatedAt).ToListAsync();
+            var projects = await _context.Projects
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+
+            var response = projects.Select(p => MapToResponse(p)).ToList();
+
+            return Ok(new ApiResponse<List<ProjectResponse>>(response));
         }
 
         // GET: api/projects/home (取得首頁專案)
         [HttpGet("home")]
-        public async Task<ActionResult<IEnumerable<Project>>> GetHomeProjects()
+        public async Task<ActionResult<IEnumerable<ProjectResponse>>> GetHomeProjects()
         {
-            return await _context.Projects
+            var projects = await _context.Projects
                 .OrderByDescending(p => p.CreatedAt)
                 .Take(3)
                 .ToListAsync();
+
+            var response = projects.Select(p => MapToResponse(p)).ToList();
+
+            return Ok(new ApiResponse<List<ProjectResponse>>(response));
         }
 
         // GET: api/projects/5 (取得單一專案)
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<ProjectResponse>> GetProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);
-            if (project == null) return NotFound();
-            return project;
+            
+            if (project == null) 
+            {
+                return NotFound(new ApiResponse<string>("找不到該專案"));
+            }
+
+            return Ok(new ApiResponse<ProjectResponse>(MapToResponse(project)));
         }
 
         // POST: api/projects (新增專案 - 簡易保護)
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        public async Task<ActionResult<ProjectResponse>> PostProject([FromBody] CreateProjectRequest request)
         {
+            var project = new Project
+            {
+                Title = request.Title,
+                Description = request.Description,
+                Content = request.Content,
+                Category = request.Category,
+                DemoUrl = request.DemoUrl,
+                RepoUrl = request.RepoUrl,
+                IsFeatured = request.IsFeatured,
+                CreatedAt = DateTime.Now,
+                Images = request.Images,
+                TechStack = request.TechStack
+            };
+
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
+
+            var response = MapToResponse(project);
+
+            return CreatedAtAction(nameof(GetProject), new { id = project.Id }, new ApiResponse<ProjectResponse>(response, "專案建立成功"));
         }
 
         // DELETE: api/projects/5 (刪除專案)
@@ -57,11 +91,33 @@ namespace Backend.Controllers
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);
-            if (project == null) return NotFound();
+            if (project == null) 
+            {
+                return NotFound(new ApiResponse<string>("找不到該專案"));
+            }
 
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
-            return NoContent();
+            
+            return Ok(new ApiResponse<string>(null, "專案已刪除"));
+        }
+
+        private static ProjectResponse MapToResponse(Project p)
+        {
+            return new ProjectResponse
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description,
+                Content = p.Content,
+                Category = p.Category,
+                DemoUrl = p.DemoUrl,
+                RepoUrl = p.RepoUrl,
+                IsFeatured = p.IsFeatured,
+                CreatedAt = p.CreatedAt,
+                Images = p.Images,
+                TechStack = p.TechStack
+            };
         }
     }
 }

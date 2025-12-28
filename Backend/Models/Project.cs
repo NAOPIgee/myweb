@@ -25,5 +25,10 @@ namespace Backend.Models
         public List<string> TechStack { get; set; } = new List<string>();
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public static implicit operator Project(Project v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

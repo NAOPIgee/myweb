@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
+using Backend.DTOs;
+using Backend.Wrappers;
 
 namespace Backend.Controllers
 {
@@ -18,7 +20,7 @@ namespace Backend.Controllers
 
         // GET: api/profile
         [HttpGet]
-        public async Task<ActionResult<UserProfile>> GetProfile([FromQuery] bool isPublic = false)
+        public async Task<IActionResult> GetProfile([FromQuery] bool isPublic = false)
         {
             var profile = await _context.UserProfiles.FirstOrDefaultAsync();
 
@@ -28,18 +30,36 @@ namespace Backend.Controllers
                 {
                     Name = "預設名字",
                     Title = "全端工程師",
-                    BioContent = ""
+                    BioContent = "",
+                    Email = "",
+                    Location = "",
+                    AvatarUrl = "",
+                    NewspaperTitle = "" 
                 };
                 _context.UserProfiles.Add(profile);
                 await _context.SaveChangesAsync();
             }
 
-            if (isPublic && !string.IsNullOrEmpty(profile.BioContent) && profile.BioContent.Length > 200)
+            var responseDto = new ProfileResponse
             {
-                profile.BioContent = profile.BioContent.Substring(0, 200) + "...";
+                Id = profile.Id,
+                Name = profile.Name,
+                Title = profile.Title,
+                Email = profile.Email,
+                Location = profile.Location,
+                AvatarUrl = profile.AvatarUrl,
+                NewspaperTitle = profile.NewspaperTitle,
+                BioContent = profile.BioContent,
+                GithubUrl = profile.GithubUrl,
+                LinkedinUrl = profile.LinkedinUrl
+            };
+
+            if (isPublic && !string.IsNullOrEmpty(responseDto.BioContent) && responseDto.BioContent.Length > 200)
+            {
+                responseDto.BioContent = responseDto.BioContent.Substring(0, 200) + "...";
             }
 
-            return Ok(profile);
+            return Ok(new ApiResponse<ProfileResponse>(responseDto));
         }
 
         // PUT: api/profile
@@ -64,20 +84,22 @@ namespace Backend.Controllers
             profile.LinkedinUrl = request.LinkedinUrl;
 
             await _context.SaveChangesAsync();
-            return Ok(new { message = "個人檔案已更新", data = profile });
-        }
-    }
 
-    public class UpdateProfileRequest
-    {
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public string Email { get; set; }
-        public string Location { get; set; }
-        public string AvatarUrl { get; set; }
-        public string NewspaperTitle { get; set; }
-        public string BioContent { get; set; }
-        public string? GithubUrl { get; set; }
-        public string? LinkedinUrl { get; set; }
+            var responseDto = new ProfileResponse
+            {
+                Id = profile.Id,
+                Name = profile.Name,
+                Title = profile.Title,
+                Email = profile.Email,
+                Location = profile.Location,
+                AvatarUrl = profile.AvatarUrl,
+                NewspaperTitle = profile.NewspaperTitle,
+                BioContent = profile.BioContent,
+                GithubUrl = profile.GithubUrl,
+                LinkedinUrl = profile.LinkedinUrl
+            };
+
+            return Ok(new ApiResponse<ProfileResponse>(responseDto, "個人檔案已更新"));
+        }
     }
 }

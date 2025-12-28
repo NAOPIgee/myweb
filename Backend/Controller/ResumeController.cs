@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
+using Backend.DTOs;
+using Backend.Wrappers;
 
 namespace Backend.Controllers
 {
@@ -34,7 +36,7 @@ namespace Backend.Controllers
 
             var response = new ResumeDto
             {
-                Profile = new ProfileDto
+                Profile = new ResumeProfileDto
                 {
                     Name = profile.Name,
                     Title = profile.Title,
@@ -45,7 +47,7 @@ namespace Backend.Controllers
                     Linkedin = profile.LinkedinUrl ?? "",
                     BioContent = profile.BioContent
                 },
-                Preferences = new PreferencesDto
+                Preferences = new ResumePreferencesDto
                 {
                     JobType = profile.JobType,
                     Role = profile.JobRole,
@@ -53,12 +55,23 @@ namespace Backend.Controllers
                     Availability = profile.Availability,
                     Location = profile.Location
                 },
-                Skills = skills,
-                Experience = exp,
-                Education = edu
+                Skills = skills.Select(s => new SkillDto { Category = s.Category }).ToList(),
+                Experience = exp.Select(e => new ExperienceDto 
+                { 
+                    Company = e.Company, 
+                    Role = e.Role, 
+                    Period = e.Period, 
+                    Description = e.Description 
+                }).ToList(),
+                Education = edu.Select(e => new EducationDto 
+                { 
+                    School = e.School, 
+                    Degree = e.Degree, 
+                    Period = e.Period 
+                }).ToList()
             };
 
-            return Ok(response);
+            return Ok(new ApiResponse<ResumeDto>(response));
         }
 
         // PUT: api/resume
@@ -83,47 +96,43 @@ namespace Backend.Controllers
             profile.JobRole = request.Preferences.Role;
             profile.Salary = request.Preferences.Salary;
             profile.Availability = request.Preferences.Availability;
+            
             _context.ResumeSkills.RemoveRange(_context.ResumeSkills);
             _context.ResumeExperiences.RemoveRange(_context.ResumeExperiences);
             _context.ResumeEducations.RemoveRange(_context.ResumeEducations);
 
-            if (request.Skills != null) _context.ResumeSkills.AddRange(request.Skills);
-            if (request.Experience != null) _context.ResumeExperiences.AddRange(request.Experience);
-            if (request.Education != null) _context.ResumeEducations.AddRange(request.Education);
+            if (request.Skills != null)
+            {
+                var newSkills = request.Skills.Select(s => new ResumeSkill { Category = s.Category });
+                _context.ResumeSkills.AddRange(newSkills);
+            }
+
+            if (request.Experience != null)
+            {
+                var newExp = request.Experience.Select(e => new ResumeExperience 
+                { 
+                    Company = e.Company, 
+                    Role = e.Role, 
+                    Period = e.Period, 
+                    Description = e.Description 
+                });
+                _context.ResumeExperiences.AddRange(newExp);
+            }
+
+            if (request.Education != null)
+            {
+                var newEdu = request.Education.Select(e => new ResumeEducation 
+                { 
+                    School = e.School, 
+                    Degree = e.Degree, 
+                    Period = e.Period 
+                });
+                _context.ResumeEducations.AddRange(newEdu);
+            }
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "履歷更新成功" });
+            return Ok(new ApiResponse<string>(null, "履歷更新成功"));
         }
-    }
-
-    public class ResumeDto
-    {
-        public ProfileDto Profile { get; set; }
-        public PreferencesDto Preferences { get; set; }
-        public List<ResumeSkill> Skills { get; set; }
-        public List<ResumeExperience> Experience { get; set; }
-        public List<ResumeEducation> Education { get; set; }
-    }
-
-    public class ProfileDto
-    {
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public string Email { get; set; }
-        public string Location { get; set; }
-        public string Avatar { get; set; }
-        public string Github { get; set; }
-        public string Linkedin { get; set; }
-        public string BioContent { get; set; }
-    }
-
-    public class PreferencesDto
-    {
-        public string JobType { get; set; }
-        public string Role { get; set; }
-        public string Salary { get; set; }
-        public string Availability { get; set; }
-        public string Location { get; set; }
     }
 }
